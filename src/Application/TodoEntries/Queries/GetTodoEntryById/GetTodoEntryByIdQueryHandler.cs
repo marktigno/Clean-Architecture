@@ -20,7 +20,7 @@ namespace Application.TodoEntries.Queries.GetTodoEntryById
                 return Result.Failure(TodoEntryError.NotFoundEntry);
             }
 
-            return Result.Success(todo);
+            return Result.Success(new GetTodoEntryByIdResponse(todo));
         }
     }
 }

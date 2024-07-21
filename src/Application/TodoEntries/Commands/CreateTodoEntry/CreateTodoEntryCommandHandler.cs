@@ -29,7 +29,7 @@ namespace Application.TodoEntries.Commands.CreateTodoEntry
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(todoEntry);
+            return Result.Success(new CreateTodoEntryResponse(todoEntry.Id));
         }
     }
 }
