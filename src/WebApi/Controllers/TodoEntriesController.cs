@@ -1,4 +1,5 @@
 ﻿using Application.TodoEntries.Commands.CreateTodoEntry;
+using Application.TodoEntries.Queries.GetTodoEntries;
 using Application.TodoEntries.Queries.GetTodoEntryById;
 using Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace WebApi.Controllers
     public sealed class TodoEntriesController : ApiController
     {
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(TodoEntryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetTodoEntryByIdResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTodoEntryById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetTodoEntryByIdQuery(id);
@@ -25,7 +26,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("create")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateTodoEntry(CreateTodoEntryRequest request, CancellationToken cancellationToken)
         {
             var todoRequest = Todo.Create(request.todo);
@@ -33,17 +34,47 @@ namespace WebApi.Controllers
             {
                 var command = new CreateTodoEntryCommand(todoRequest.Value);
 
-                var todoEntry = await Sender.Send(command, cancellationToken);
+                var todoEntryId = await Sender.Send(command, cancellationToken);
 
-                if (todoEntry.IsFailure)
+                if (todoEntryId.IsFailure)
                 {
-                    return BadRequest(todoEntry.ToProblemDetails());
+                    return BadRequest(todoEntryId.ToProblemDetails());
                 }
 
-                return Ok(todoEntry);
+                return Ok(todoEntryId);
             }
 
             return BadRequest(todoRequest.ToProblemDetails());
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllTodoEntries(CancellationToken cancellationToken)
+        {
+            var query = new GetTodoEntriesQuery();
+
+            var result = await Sender.Send(query, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.ToProblemDetails());
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateTodoEntry(CancellationToken cancellationToken)
+        {
+            return Ok();
+        }
+
+        [HttpDelete("delete/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteTodoEntry(CancellationToken cancellationToken)
+        {
+            return Ok();
         }
     }
 }
