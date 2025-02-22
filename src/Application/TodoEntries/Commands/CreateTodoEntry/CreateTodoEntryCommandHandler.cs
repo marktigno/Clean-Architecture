@@ -5,16 +5,10 @@ using Domain.Shared;
 
 namespace Application.TodoEntries.Commands.CreateTodoEntry
 {
-    public sealed class CreateTodoEntryCommandHandler : ICommandHandler<CreateTodoEntryCommand, Result>
+    public sealed class CreateTodoEntryCommandHandler(IRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<CreateTodoEntryCommand, Result>
     {
-        private readonly IRepository _repository;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CreateTodoEntryCommandHandler(IRepository repository, IUnitOfWork unitOfWork)
-        {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
-        }
+        private readonly IRepository _repository = repository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<Result> Handle(CreateTodoEntryCommand command, CancellationToken cancellationToken)
         {

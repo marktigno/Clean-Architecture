@@ -7,7 +7,11 @@ namespace Domain.ValueObjects
     {
         public const int MaxLength = 100;
 
-        private Todo() { }
+        private Todo()
+        {
+            Value = string.Empty; // Initialize Value to avoid CS8618
+        }
+
         private Todo(string value)
         {
             Value = value;

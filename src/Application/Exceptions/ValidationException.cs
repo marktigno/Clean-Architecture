@@ -1,11 +1,7 @@
 ﻿namespace Application.Exceptions
 {
-    public sealed class ValidationException : Exception
+    public sealed class ValidationException(Dictionary<string, string[]> errors) : Exception("Validation errors occurred")
     {
-        public ValidationException(Dictionary<string, string[]> errors)
-            : base("Validation errors occurred") =>
-            Errors = errors;
-
-        public Dictionary<string, string[]> Errors { get; }
+        public Dictionary<string, string[]> Errors { get; } = errors;
     }
 }

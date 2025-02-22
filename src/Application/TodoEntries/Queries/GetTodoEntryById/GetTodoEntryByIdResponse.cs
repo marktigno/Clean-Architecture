@@ -2,5 +2,5 @@
 
 namespace Application.TodoEntries.Queries.GetTodoEntryById
 {
-    public sealed record GetTodoEntryByIdResponse(TodoEntry todoEntry);
+    public sealed record GetTodoEntryByIdResponse(TodoEntry TodoEntry);
 }

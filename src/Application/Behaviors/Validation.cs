@@ -4,14 +4,9 @@ using MediatR;
 
 namespace Application.Behaviors
 {
-    public class Validation<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse> where TResponse : Error
+    public class Validation<TRequest, TResponse>(IValidator<TRequest>? validator = null) : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse> where TResponse : Error
     {
-        private readonly IValidator<TRequest>? _validator;
-
-        public Validation(IValidator<TRequest>? validator = null)
-        {
-            _validator = validator;
-        }
+        private readonly IValidator<TRequest>? _validator = validator;
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {

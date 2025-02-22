@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public sealed class TodoEntryRepository : IRepository
+    public sealed class TodoEntryRepository(ApplicationDbContext dbContext) : IRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        public TodoEntryRepository(ApplicationDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        private readonly ApplicationDbContext _dbContext = dbContext;
 
         public async Task AddTodo(TodoEntry todoEntry) => await _dbContext.AddAsync(todoEntry);
 
