@@ -5,11 +5,9 @@ using Domain.Shared;
 
 namespace Application.TodoEntries.Queries.GetTodoEntryById
 {
-    public sealed class GetTodoEntryByIdQueryHandler : IQueryHandler<GetTodoEntryByIdQuery, Result>
+    public sealed class GetTodoEntryByIdQueryHandler(IRepository repository) : IQueryHandler<GetTodoEntryByIdQuery, Result>
     {
-        public readonly IRepository _repository;
-
-        public GetTodoEntryByIdQueryHandler(IRepository repository) => _repository = repository;
+        public readonly IRepository _repository = repository;
 
         public async Task<Result> Handle(GetTodoEntryByIdQuery request, CancellationToken cancellationToken)
         {

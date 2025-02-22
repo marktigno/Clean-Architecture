@@ -9,10 +9,10 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public abstract class ApiController : ControllerBase
     {
-        private ISender _sender;
-        private IMapper _mapper;
+        private ISender? _sender;
+        private IMapper? _mapper;
 
-        protected ISender Sender => _sender ??= HttpContext.RequestServices.GetService<ISender>();
-        protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
+        protected ISender? Sender => _sender ??= HttpContext.RequestServices.GetService<ISender>();
+        protected IMapper? Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
     }
 }

@@ -29,7 +29,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateTodoEntry(CreateTodoEntryRequest request, CancellationToken cancellationToken)
         {
-            var todoRequest = Todo.Create(request.todo);
+            var todoRequest = Todo.Create(request.Todo);
             if (todoRequest.IsSuccess)
             {
                 var command = new CreateTodoEntryCommand(todoRequest.Value);
@@ -67,6 +67,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateTodoEntry(CancellationToken cancellationToken)
         {
+            await Task.Delay(500, cancellationToken);
             return Ok();
         }
 
@@ -74,6 +75,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteTodoEntry(CancellationToken cancellationToken)
         {
+            await Task.Delay(500, cancellationToken);
             return Ok();
         }
     }
