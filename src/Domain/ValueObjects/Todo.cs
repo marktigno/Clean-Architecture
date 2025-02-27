@@ -9,7 +9,7 @@ namespace Domain.ValueObjects
 
         private Todo()
         {
-            Value = string.Empty; // Initialize Value to avoid CS8618
+            Value = string.Empty;
         }
 
         private Todo(string value)
