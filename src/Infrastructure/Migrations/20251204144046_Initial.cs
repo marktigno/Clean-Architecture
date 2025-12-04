@@ -16,7 +16,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Todo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Todo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },

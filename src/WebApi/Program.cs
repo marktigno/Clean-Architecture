@@ -22,7 +22,7 @@ builder.Host.UseSerilog((context, configuration) =>
 
 var app = builder.Build();
 
-await app.ApplyMigrations();
+app.ApplyMigrations();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

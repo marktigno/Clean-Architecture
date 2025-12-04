@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240717143857_Initial")]
+    [Migration("20251204144046_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -62,8 +62,7 @@ namespace Infrastructure.Migrations
                                 .HasForeignKey("TodoEntryId");
                         });
 
-                    b.Navigation("Todo")
-                        .IsRequired();
+                    b.Navigation("Todo");
                 });
 #pragma warning restore 612, 618
         }

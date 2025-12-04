@@ -8,24 +8,17 @@ namespace WebApi
 {
     public static class StartupExtensions
     {
-        public static async Task ApplyMigrations(this WebApplication app)
+        public static void ApplyMigrations(this IApplicationBuilder app)
         {
-            using var scope = app.Services.CreateScope();
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-            try
-            {
-                await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            using ApplicationDbContext dbContext =
+                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                if (dbContext != null)
-                {
-                    await dbContext.Database.EnsureDeletedAsync();
-                    await dbContext.Database.MigrateAsync();
-                }
-            }
-            catch (Exception ex)
+            if (!dbContext.Database.GetPendingMigrations().Any())
             {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
-                logger.LogError(ex, "An error occurred while migrating the database.");
+                dbContext.Database.Migrate();
+
             }
         }
 
