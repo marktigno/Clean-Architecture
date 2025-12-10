@@ -1,6 +1,5 @@
-﻿using Application.Behaviors;
+﻿using Application.Abstractions.Messaging;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -9,11 +8,16 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            var assembly = typeof(DependencyInjection).Assembly;
+            services.Scan(scan =>
+                scan.FromAssembliesOf(typeof(DependencyInjection))
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)), publicOnly: false)
+                    .AsImplementedInterfaces().WithScopedLifetime()
+                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)), publicOnly: false)
+                    .AsImplementedInterfaces().WithScopedLifetime()
+                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<,>)), publicOnly: false)
+                    .AsImplementedInterfaces().WithScopedLifetime());
 
-            services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(Validation<,>));
-            services.AddValidatorsFromAssembly(assembly);
+            services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
 
             return services;
         }

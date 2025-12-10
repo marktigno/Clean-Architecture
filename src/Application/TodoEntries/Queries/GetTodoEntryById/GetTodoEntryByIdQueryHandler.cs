@@ -9,7 +9,7 @@ namespace Application.TodoEntries.Queries.GetTodoEntryById
     {
         public readonly IRepository _repository = repository;
 
-        public async Task<Result> Handle(GetTodoEntryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<Result>> Handle(GetTodoEntryByIdQuery request, CancellationToken cancellationToken)
         {
             TodoEntry? todo = await _repository.GetTodoEntryById(request.Id);
 

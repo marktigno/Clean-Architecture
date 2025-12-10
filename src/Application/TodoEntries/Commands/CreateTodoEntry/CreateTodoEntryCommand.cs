@@ -4,5 +4,5 @@ using Domain.ValueObjects;
 
 namespace Application.TodoEntries.Commands.CreateTodoEntry
 {
-    public sealed record CreateTodoEntryCommand(Todo Todo) : ICommand<Result>;
+    public sealed record CreateTodoEntryCommand(Todo Todo) : ICommand;
 }

@@ -33,7 +33,7 @@ namespace Domain.ValueObjects
             {
                 return Result.Failure<Todo>(new Error(
                     "Todo.TooLong",
-                    $"Todo item is too long (max characters: 100, todo entry: {todo.Length}.",
+                    $"Todo item is too long (max characters: 100, todo entry: {todo.Length}).",
                     ErrorType.Validation));
             }
 

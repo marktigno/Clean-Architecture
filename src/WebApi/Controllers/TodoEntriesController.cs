@@ -1,13 +1,17 @@
-﻿using Application.TodoEntries.Commands.CreateTodoEntry;
+﻿using Application.Abstractions.Messaging;
+using Application.TodoEntries.Commands.CreateTodoEntry;
 using Application.TodoEntries.Queries.GetTodoEntries;
 using Application.TodoEntries.Queries.GetTodoEntryById;
+using Domain.Shared;
 using Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
-    public sealed class TodoEntriesController : ApiController
+    public sealed class TodoEntriesController(ICommandHandler<CreateTodoEntryCommand> createTodoEntryCommandHandler,
+        IQueryHandler<GetTodoEntryByIdQuery, Result> getTodoEntryByIdQueryHandler,
+        IQueryHandler<GetTodoEntriesQuery, Result> getTodoEntriesQueryHandler) : ApiController
     {
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(GetTodoEntryByIdResponse), StatusCodes.Status200OK)]
@@ -15,14 +19,14 @@ namespace WebApi.Controllers
         {
             var query = new GetTodoEntryByIdQuery(id);
 
-            var todoEntry = await Sender.Send(query, cancellationToken);
+            var result = await getTodoEntryByIdQueryHandler.Handle(query, cancellationToken);
 
-            if (todoEntry.IsFailure)
+            if (result.Value.IsFailure)
             {
-                return NotFound(todoEntry.ToProblemDetails());
+                return NotFound(result.Value.ToProblemDetails());
             }
 
-            return Ok(todoEntry);
+            return Ok(result.Value);
         }
 
         [HttpPost("create")]
@@ -30,18 +34,19 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateTodoEntry(CreateTodoEntryRequest request, CancellationToken cancellationToken)
         {
             var todoRequest = Todo.Create(request.Todo);
+
+
             if (todoRequest.IsSuccess)
             {
                 var command = new CreateTodoEntryCommand(todoRequest.Value);
+                var result = await createTodoEntryCommandHandler.Handle(command, cancellationToken);
 
-                var todoEntryId = await Sender.Send(command, cancellationToken);
-
-                if (todoEntryId.IsFailure)
+                if (result.IsFailure)
                 {
-                    return BadRequest(todoEntryId.ToProblemDetails());
+                    return BadRequest(result.ToProblemDetails());
                 }
 
-                return Ok(todoEntryId);
+                return Ok(result);
             }
 
             return BadRequest(todoRequest.ToProblemDetails());
@@ -53,14 +58,14 @@ namespace WebApi.Controllers
         {
             var query = new GetTodoEntriesQuery();
 
-            var result = await Sender.Send(query, cancellationToken);
+            var result = await getTodoEntriesQueryHandler.Handle(query, cancellationToken);
 
-            if (result.IsFailure)
+            if (result.Value.IsFailure)
             {
-                return BadRequest(result.ToProblemDetails());
+                return BadRequest(result.Value.ToProblemDetails());
             }
 
-            return Ok(result);
+            return Ok(result.Value);
         }
 
         [HttpPut("update")]

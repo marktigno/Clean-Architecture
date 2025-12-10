@@ -5,7 +5,7 @@ using Domain.Shared;
 
 namespace Application.TodoEntries.Commands.CreateTodoEntry
 {
-    public sealed class CreateTodoEntryCommandHandler(IRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<CreateTodoEntryCommand, Result>
+    public sealed class CreateTodoEntryCommandHandler(IRepository repository, IUnitOfWork unitOfWork) : ICommandHandler<CreateTodoEntryCommand>
     {
         private readonly IRepository _repository = repository;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -16,7 +16,7 @@ namespace Application.TodoEntries.Commands.CreateTodoEntry
 
             if (command.Todo == null)
             {
-                return Result.Failure(TodoEntryError.EmptyOrNull);
+                return Result.Failure<TodoEntry>(TodoEntryError.EmptyOrNull);
             }
 
             await _repository.AddTodo(todoEntry);
@@ -25,5 +25,6 @@ namespace Application.TodoEntries.Commands.CreateTodoEntry
 
             return Result.Success(new CreateTodoEntryResponse(todoEntry.Id));
         }
+
     }
 }

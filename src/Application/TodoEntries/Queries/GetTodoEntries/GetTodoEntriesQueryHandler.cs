@@ -9,16 +9,18 @@ namespace Application.TodoEntries.Queries.GetTodoEntries
     {
         public readonly IRepository _repository = repository;
 
-        public async Task<Result> Handle(GetTodoEntriesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<Result>> Handle(GetTodoEntriesQuery request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetTodoEntries();
+            List<TodoEntry> todoEntries;
 
-            if (result is null)
+            todoEntries = await _repository.GetTodoEntries();
+
+            if (!todoEntries.Any())
             {
                 return Result.Failure(TodoEntryError.EmptyOrNull);
             }
 
-            return Result.Success(new GetTodoEntriesResponse(result));
+            return Result.Success(new GetTodoEntriesResponse(todoEntries));
         }
     }
 }

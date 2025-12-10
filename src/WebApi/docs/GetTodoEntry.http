@@ -1,4 +1,4 @@
 @TodoApi_HostAddress = http://localhost:5000
 
-GET {{TodoApi_HostAddress}}/api/TodoEntries/296df3e0-48cd-4231-9635-895154304fa7
+GET {{TodoApi_HostAddress}}/api/TodoEntries/ef4307cf-e0dc-4ccc-84be-0b83ee3792c1
 Accept: text/plain
