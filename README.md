@@ -15,5 +15,4 @@ To migrate the database:
 To run the project:
 - ```dotnet run --project .\src\WebApi\```
 
-Then open Swagger UI to test the REST API endpoints.
-https://localhost:5001/swagger/
+Then open Swagger UI to test the REST API endpoints: https://localhost:5001/swagger/
