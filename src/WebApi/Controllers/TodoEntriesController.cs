@@ -35,7 +35,6 @@ namespace WebApi.Controllers
         {
             var todoRequest = Todo.Create(request.Todo);
 
-
             if (todoRequest.IsSuccess)
             {
                 var command = new CreateTodoEntryCommand(todoRequest.Value);

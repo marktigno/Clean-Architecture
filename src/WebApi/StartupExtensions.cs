@@ -18,7 +18,6 @@ namespace WebApi
             if (!dbContext.Database.GetPendingMigrations().Any())
             {
                 dbContext.Database.Migrate();
-
             }
         }
 
