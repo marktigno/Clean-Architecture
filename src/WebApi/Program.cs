@@ -19,7 +19,6 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddMappings();
-
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Host.UseSerilog((context, configuration) =>

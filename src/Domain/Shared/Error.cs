@@ -50,6 +50,7 @@
         public static Error Validation(string code, string message) => new(code, message, ErrorType.Validation);
         public static Error Conflict(string code, string message) => new(code, message, ErrorType.Conflict);
         public static Error Failure(string code, string message) => new(code, message, ErrorType.Failure);
+        public static Error Problem(string code, string message) => new(code, message, ErrorType.Problem);
     }
 
     public enum ErrorType
@@ -57,7 +58,8 @@
         Failure = 0,
         Validation = 1,
         NotFound = 2,
-        Conflict = 3
+        Conflict = 3,
+        Problem = 4
     }
 
 }
