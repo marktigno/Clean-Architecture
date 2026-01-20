@@ -13,6 +13,7 @@ namespace WebApi.Endpoints.Todos
             {
                 var query = new GetTodoEntryByIdQuery(id);
                 var result = await getTodoEntryByIdQueryHandler.Handle(query, cancellationToken);
+
                 if (result.Value.IsFailure)
                 {
                     return Results.NotFound(result.Value.ToProblemDetails());
@@ -20,8 +21,8 @@ namespace WebApi.Endpoints.Todos
                 return Results.Ok(result.Value);
             })
             .Produces<GetTodoEntryByIdResponse>(StatusCodes.Status200OK)
-            .WithName("GetTodoById")
-            .WithTags("Todos");
+            .WithTags("Todos")
+            .WithName("GetTodoById");
         }
     }
 }

@@ -18,7 +18,6 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetTodoEntryById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetTodoEntryByIdQuery(id);
-
             var result = await getTodoEntryByIdQueryHandler.Handle(query, cancellationToken);
 
             if (result.Value.IsFailure)
@@ -56,7 +55,6 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetAllTodoEntries(CancellationToken cancellationToken)
         {
             var query = new GetTodoEntriesQuery();
-
             var result = await getTodoEntriesQueryHandler.Handle(query, cancellationToken);
 
             if (result.Value.IsFailure)
