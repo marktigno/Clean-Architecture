@@ -12,39 +12,41 @@ namespace WebApi.Extensions
             }
 
             return Results.Problem(
-                statusCode: GetStatusCode(result.Error.ErrorType),
-                title: GetTitle(result.Error.ErrorType),
-                type: GetType(result.Error.ErrorType),
+                statusCode: GetStatusCode(result.Error),
+                title: GetTitle(result.Error),
+                type: GetType(result.Error),
                 extensions: new Dictionary<string, object?>
                 {
                     { "errors", new[] { result.Error} }
                 });
 
-            static int GetStatusCode(ErrorType errorType) =>
-                errorType switch
+            static int GetStatusCode(Error error) =>
+                error.ErrorType switch
                 {
-                    ErrorType.Validation => StatusCodes.Status400BadRequest,
+                    ErrorType.Validation or ErrorType.Problem => StatusCodes.Status400BadRequest,
                     ErrorType.NotFound => StatusCodes.Status404NotFound,
                     ErrorType.Conflict => StatusCodes.Status409Conflict,
                     _ => StatusCodes.Status500InternalServerError
                 };
 
-            static string GetTitle(ErrorType errorType) =>
-                errorType switch
+            static string GetTitle(Error error) =>
+                error.ErrorType switch
                 {
                     ErrorType.Validation => "Bad Request",
                     ErrorType.NotFound => "Not Found",
                     ErrorType.Conflict => "Conflict",
+                    ErrorType.Problem => "Problem",
                     _ => "Server Failure"
                 };
 
-            static string GetType(ErrorType errorType) =>
-                errorType switch
+            static string GetType(Error error) =>
+                error.ErrorType switch
                 {
-                    ErrorType.Validation => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
-                    ErrorType.NotFound => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4",
-                    ErrorType.Conflict => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.8",
-                    _ => "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1"
+                    ErrorType.Validation => "https://tools.ietf.org/doc/html/rfc7231#section-6.5.1",
+                    ErrorType.Problem => "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                    ErrorType.NotFound => "https://tools.ietf.org/doc/html/rfc7231#section-6.5.4",
+                    ErrorType.Conflict => "https://tools.ietf.org/doc/html/rfc7231#section-6.5.8",
+                    _ => "https://tools.ietf.org/doc/html/rfc7231#section-6.6.1"
                 };
         }
     }
