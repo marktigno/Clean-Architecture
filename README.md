@@ -15,6 +15,9 @@ Run docker compose to up the database service:
 To migrate the database:
 - ```dotnet ef database update --project ./src/Infrastructure --startup-project ./src/WebApi```
 
+Optional if you want to add your own migration, execute this first:
+- ```dotnet ef migrations add Initial --project ./src/Infrastructure --startup-project ./src/WebApi```
+
 Register a dev certificate on your local machine:
 - ```dotnet dev-certs https --clean```
 - ```dotnet dev-certs https --trust```
@@ -23,3 +26,6 @@ To run the project:
 - ```dotnet run --project ./src/WebApi --launch-profile https```
 
 Then open Swagger UI to test the REST API endpoints: https://localhost:5001/swagger/
+
+
+Note: You can replace what Database system that you will use for this solution. Please configure the `appsettings.json` and comment/uncomment the corresponding code in `Infrastructure/DependencyInjection.cs` to use the database system of your choice. The default is set to SQL Server.
