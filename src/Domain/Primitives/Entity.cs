@@ -13,7 +13,7 @@
         public Guid Id { get; private init; }
         public DateTime CreatedDateTime { get; private init; }
         // public string CreatedBy { get; private init; }
-        public DateTime? ModifiedDateTime { get; private set; }
+        public DateTime? ModifiedDateTime { get; set; }
         // public string? ModifiedBy { get; private set; } = string.Empty;
 
         public static bool operator ==(Entity? first, Entity? second)
