@@ -1,5 +1,7 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.TodoEntries.Commands.CreateTodoEntry;
+using Application.TodoEntries.Commands.DeleteTodoEntry;
+using Application.TodoEntries.Commands.UpdateTodoEntry;
 using Application.TodoEntries.Queries.GetTodoEntries;
 using Application.TodoEntries.Queries.GetTodoEntryById;
 using Domain.Shared;
@@ -9,7 +11,10 @@ using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
-    public sealed class TodoEntriesController(ICommandHandler<CreateTodoEntryCommand> createTodoEntryCommandHandler,
+    public sealed class TodoEntriesController(
+        ICommandHandler<CreateTodoEntryCommand> createTodoEntryCommandHandler,
+        ICommandHandler<UpdateTodoEntryCommand> updateTodoEntryCommandHandler,
+        ICommandHandler<DeleteTodoEntryCommand> deleteTodoEntryCommandHandler,
         IQueryHandler<GetTodoEntryByIdQuery, Result> getTodoEntryByIdQueryHandler,
         IQueryHandler<GetTodoEntriesQuery, Result> getTodoEntriesQueryHandler) : ApiController
     {
@@ -27,6 +32,59 @@ namespace WebApi.Controllers
 
             return Ok(result.Value);
         }
+
+        [HttpDelete("delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteTodoEntry(DeleteTodoEntryRequest request, CancellationToken cancellationToken)
+        {
+            var query = new GetTodoEntryByIdQuery(request.Id);
+            var existingTodoEntry = await getTodoEntryByIdQueryHandler.Handle(query, cancellationToken);
+
+            if (existingTodoEntry.Value.IsFailure)
+            {
+                return NotFound(existingTodoEntry.Value.ToProblemDetails());
+            }
+
+            var command = new DeleteTodoEntryCommand(request.Id);
+            var result = await deleteTodoEntryCommandHandler.Handle(command, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.ToProblemDetails());
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateTodoEntry(UpdateTodoEntryRequest request, CancellationToken cancellationToken)
+        {
+            var query = new GetTodoEntryByIdQuery(request.Id);
+            var existingTodoEntry = await getTodoEntryByIdQueryHandler.Handle(query, cancellationToken);
+
+            if (existingTodoEntry.Value.IsFailure)
+            {
+                return NotFound(existingTodoEntry.Value.ToProblemDetails());
+            }
+
+            var todoUpdateRequest = Todo.Create(request.Todo);
+
+            if (todoUpdateRequest.IsSuccess)
+            {
+                var command = new UpdateTodoEntryCommand(request.Id, todoUpdateRequest.Value);
+                var result = await updateTodoEntryCommandHandler.Handle(command, cancellationToken);
+
+                if (result.IsFailure)
+                {
+                    return BadRequest(result.ToProblemDetails());
+                }
+
+                return Ok(result);
+            }
+            return BadRequest(todoUpdateRequest.ToProblemDetails());
+        }
+
 
         [HttpPost("create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -63,22 +121,6 @@ namespace WebApi.Controllers
             }
 
             return Ok(result.Value);
-        }
-
-        [HttpPut("update")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateTodoEntry(CancellationToken cancellationToken)
-        {
-            await Task.Delay(500, cancellationToken);
-            return Ok();
-        }
-
-        [HttpDelete("delete/{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteTodoEntry(CancellationToken cancellationToken)
-        {
-            await Task.Delay(500, cancellationToken);
-            return Ok();
         }
     }
 }

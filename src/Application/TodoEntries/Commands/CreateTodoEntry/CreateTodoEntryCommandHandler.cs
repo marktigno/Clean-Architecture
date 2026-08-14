@@ -12,12 +12,12 @@ namespace Application.TodoEntries.Commands.CreateTodoEntry
 
         public async Task<Result> Handle(CreateTodoEntryCommand command, CancellationToken cancellationToken)
         {
-            var todoEntry = new TodoEntry(Guid.NewGuid(), command.Todo);
-
             if (command.Todo == null)
             {
                 return Result.Failure<TodoEntry>(TodoEntryError.EmptyOrNull);
             }
+
+            var todoEntry = new TodoEntry(Guid.NewGuid(), command.Todo);
 
             await _repository.AddTodo(todoEntry);
 

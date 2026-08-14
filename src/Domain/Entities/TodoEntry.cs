@@ -12,6 +12,6 @@ namespace Domain.Entities
             Todo = todo;
         }
 
-        public Todo? Todo { get; private set; }
+        public Todo? Todo { get; set; }
     }
 }
