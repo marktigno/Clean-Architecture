@@ -1,0 +1,25 @@
+@if (todos().length === 0) {
+  <p class="todo-empty">No todos yet. Add one above!</p>
+} @else {
+  <ul class="todo-list">
+    @for (entry of todos(); track entry.id) {
+      <li class="todo-item">
+        @if (editingId() === entry.id) {
+          <input
+            type="text"
+            [ngModel]="editValue()"
+            (ngModelChange)="editValue.set($event)"
+            [name]="'edit-' + entry.id"
+            [disabled]="busyId() === entry.id"
+          />
+          <button (click)="saveEdit(entry.id)" [disabled]="busyId() === entry.id">Save</button>
+          <button (click)="cancelEdit()" [disabled]="busyId() === entry.id">Cancel</button>
+        } @else {
+          <span class="todo-text">{{ entry.todo.value }}</span>
+          <button (click)="startEdit(entry)" [disabled]="busyId() === entry.id">Edit</button>
+          <button (click)="delete(entry.id)" [disabled]="busyId() === entry.id">Delete</button>
+        }
+      </li>
+    }
+  </ul>
+}

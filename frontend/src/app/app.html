@@ -1,0 +1,17 @@
+<main class="todo-app">
+  <h1>To-Do List</h1>
+  <app-todo-form (added)="onTodoAdded($event)" />
+  @if (loading()) {
+    <p>Loading todos...</p>
+  }
+  @if (error()) {
+    <p class="todo-error">{{ error() }}</p>
+  }
+  @if (!loading()) {
+    <app-todo-list
+      [todos]="todos()"
+      (updated)="onTodoUpdated($event)"
+      (deleted)="onTodoDeleted($event)"
+    />
+  }
+</main>

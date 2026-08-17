@@ -1,0 +1,15 @@
+<form class="todo-form" (ngSubmit)="onSubmit()">
+  <input
+    type="text"
+    [ngModel]="value()"
+    (ngModelChange)="value.set($event)"
+    name="todo"
+    maxlength="100"
+    placeholder="What needs to be done?"
+    [disabled]="submitting()"
+  />
+  <button type="submit" [disabled]="submitting()">Add</button>
+  @if (error()) {
+    <p class="todo-error">{{ error() }}</p>
+  }
+</form>

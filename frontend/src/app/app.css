@@ -1,0 +1,10 @@
+.todo-app {
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.todo-error {
+  color: #e5484d;
+}
