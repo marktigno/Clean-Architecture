@@ -24,6 +24,55 @@ export class App implements OnInit {
     this.loadTodos();
   }
 
+  private getReadableError(err: unknown, fallback: string): string {
+    const payload =
+      (err && typeof err === 'object' && 'error' in err ? (err as { error?: unknown }).error : undefined) ?? err;
+
+    if (typeof payload === 'string' && payload.trim()) {
+      return payload;
+    }
+
+    if (payload && typeof payload === 'object') {
+      const record = payload as Record<string, unknown>;
+      const nestedError = record['error'] && typeof record['error'] === 'object' ? (record['error'] as Record<string, unknown>) : null;
+
+      const candidates = [
+        record['message'],
+        nestedError?.['message'],
+        record['detail'],
+        nestedError?.['detail'],
+        record['title'],
+        nestedError?.['title'],
+      ];
+
+      for (const candidate of candidates) {
+        if (typeof candidate === 'string' && candidate.trim()) {
+          return candidate;
+        }
+      }
+
+      const errors = Array.isArray(record['errors']) ? record['errors'] : Array.isArray(nestedError?.['errors']) ? nestedError['errors'] : [];
+      for (const item of errors) {
+        if (typeof item === 'string' && item.trim()) {
+          return item;
+        }
+
+        if (item && typeof item === 'object' && 'message' in item) {
+          const message = (item as { message?: string }).message;
+          if (typeof message === 'string' && message.trim()) {
+            return message;
+          }
+        }
+      }
+    }
+
+    if (typeof (err as { message?: string })?.message === 'string' && (err as { message?: string }).message!.trim()) {
+      return (err as { message?: string }).message!;
+    }
+
+    return fallback;
+  }
+
   private loadTodos(): void {
     this.loading.set(true);
     this.error.set(null);
@@ -32,8 +81,8 @@ export class App implements OnInit {
         this.todos.set(entries);
         this.loading.set(false);
       },
-      error: (err: Error) => {
-        this.error.set(err.message ?? 'Failed to load todos.');
+      error: (err: unknown) => {
+        this.error.set(this.getReadableError(err, 'Failed to load todos.'));
         this.loading.set(false);
       },
     });
@@ -45,8 +94,8 @@ export class App implements OnInit {
         this.todoForm?.reset();
         this.loadTodos();
       },
-      error: (err: Error) => {
-        this.todoForm?.setError(err.message ?? 'Failed to add todo.');
+      error: (err: unknown) => {
+        this.todoForm?.setError(this.getReadableError(err, 'Failed to add todo.'));
       },
     });
   }
@@ -57,8 +106,8 @@ export class App implements OnInit {
         this.todoList?.clearBusy();
         this.loadTodos();
       },
-      error: (err: Error) => {
-        this.error.set(err.message ?? 'Failed to update todo.');
+      error: (err: unknown) => {
+        this.error.set(this.getReadableError(err, 'Failed to update todo.'));
         this.todoList?.clearBusy();
       },
     });
@@ -70,8 +119,8 @@ export class App implements OnInit {
         this.todoList?.clearBusy();
         this.loadTodos();
       },
-      error: (err: Error) => {
-        this.error.set(err.message ?? 'Failed to delete todo.');
+      error: (err: unknown) => {
+        this.error.set(this.getReadableError(err, 'Failed to delete todo.'));
         this.todoList?.clearBusy();
       },
     });
