@@ -1,10 +1,11 @@
 import { Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { TodoEntry } from '../../models/todo.model';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-todo-list',
-  imports: [FormsModule],
+  imports: [FormsModule, ConfirmDialogComponent],
   templateUrl: './todo-list.html',
   styleUrl: './todo-list.css',
 })
@@ -16,6 +17,7 @@ export class TodoListComponent {
   protected readonly editingId = signal<string | null>(null);
   protected readonly editValue = signal('');
   protected readonly busyId = signal<string | null>(null);
+  protected readonly pendingDeleteId = signal<string | null>(null);
 
   protected startEdit(entry: TodoEntry): void {
     this.editingId.set(entry.id);
@@ -34,13 +36,27 @@ export class TodoListComponent {
     this.updated.emit({ id, todo: trimmed });
   }
 
-  protected delete(id: string): void {
+  protected requestDelete(id: string): void {
+    if (this.busyId()) return;
+    this.pendingDeleteId.set(id);
+  }
+
+  protected cancelDelete(): void {
+    if (this.busyId()) return;
+    this.pendingDeleteId.set(null);
+  }
+
+  protected confirmDelete(): void {
+    const id = this.pendingDeleteId();
+    if (!id) return;
     this.busyId.set(id);
+    this.pendingDeleteId.set(null);
     this.deleted.emit(id);
   }
 
   clearBusy(): void {
     this.busyId.set(null);
     this.editingId.set(null);
+    this.pendingDeleteId.set(null);
   }
 }

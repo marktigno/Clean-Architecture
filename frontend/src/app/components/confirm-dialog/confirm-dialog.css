@@ -1,0 +1,37 @@
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 45%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
+.confirm-card {
+  width: min(420px, 100%);
+  background: #fff;
+  border: 1px solid #bbb;
+  padding: 1rem;
+}
+
+.confirm-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.confirm-card p {
+  margin: 0 0 1rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.confirm-actions .danger {
+  border-color: #e5484d;
+  color: #e5484d;
+}

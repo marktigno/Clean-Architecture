@@ -17,9 +17,21 @@
         } @else {
           <span class="todo-text">{{ entry.todo.value }}</span>
           <button (click)="startEdit(entry)" [disabled]="busyId() === entry.id">Edit</button>
-          <button (click)="delete(entry.id)" [disabled]="busyId() === entry.id">Delete</button>
+          <button (click)="requestDelete(entry.id)" [disabled]="busyId() === entry.id">Delete</button>
         }
       </li>
     }
   </ul>
+}
+
+@if (pendingDeleteId()) {
+  <app-confirm-dialog
+    title="Delete to-do"
+    message="Are you sure you want to delete this to-do entry?"
+    confirmText="Delete"
+    cancelText="Cancel"
+    [busy]="busyId() !== null"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDelete()"
+  />
 }

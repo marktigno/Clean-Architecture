@@ -45,21 +45,6 @@ export class App implements OnInit {
 
       const details = problemDetails ?? nestedError ?? record;
 
-      const candidates = [
-        record['message'],
-        problemDetails?.['message'],
-        nestedError?.['message'],
-        details['message'],
-        details['detail'],
-        details['title'],
-      ];
-
-      for (const candidate of candidates) {
-        if (typeof candidate === 'string' && candidate.trim()) {
-          return candidate;
-        }
-      }
-
       const errors = Array.isArray(details['errors'])
         ? details['errors']
         : Array.isArray(problemDetails?.['errors'])
@@ -80,6 +65,21 @@ export class App implements OnInit {
           }
         }
       }
+
+      const candidates = [
+        record['message'],
+        problemDetails?.['message'],
+        nestedError?.['message'],
+        details['message'],
+        details['detail'],
+        details['title'],
+      ];
+
+      for (const candidate of candidates) {
+        if (typeof candidate === 'string' && candidate.trim()) {
+          return candidate;
+        }
+      }
     }
 
     if (typeof (err as { message?: string })?.message === 'string' && (err as { message?: string }).message!.trim()) {
@@ -98,6 +98,7 @@ export class App implements OnInit {
         this.loading.set(false);
       },
       error: (err: unknown) => {
+        this.todos.set([]);
         this.error.set(this.getReadableError(err, 'Failed to load todos.'));
         this.loading.set(false);
       },
@@ -117,10 +118,20 @@ export class App implements OnInit {
   }
 
   protected onTodoUpdated(event: { id: string; todo: string }): void {
+    this.error.set(null);
     this.todoService.update(event.id, event.todo).subscribe({
       next: () => {
         this.todoList?.clearBusy();
-        this.loadTodos();
+        this.todos.update((entries) =>
+          entries.map((entry) =>
+            entry.id === event.id
+              ? {
+                  ...entry,
+                  todo: { ...entry.todo, value: event.todo },
+                }
+              : entry,
+          ),
+        );
       },
       error: (err: unknown) => {
         this.error.set(this.getReadableError(err, 'Failed to update todo.'));
@@ -130,6 +141,7 @@ export class App implements OnInit {
   }
 
   protected onTodoDeleted(id: string): void {
+    this.error.set(null);
     this.todoService.remove(id).subscribe({
       next: () => {
         this.todoList?.clearBusy();
