@@ -435,6 +435,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+<<<<<<< HEAD
 src/WebApi/bin/**
 src/Infrastructure/bin/**
 src/Application/bin/**
@@ -443,3 +444,13 @@ src/WebApi/obj/**
 src/Infrastructure/obj/**
 src/Application/obj/**
 src/Domain/obj/**
+=======
+/src/WebApi/bin/**
+/src/WebApi/obj/**
+/src/Infrastructure/bin/**
+/src/Infrastructure/obj/**
+/src/Application/bin/**
+/src/Application/obj/**
+/src/Domain/bin/**
+/src/Domain/obj/**
+>>>>>>> main

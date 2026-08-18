@@ -1,4 +1,4 @@
-@TodoApi_HostAddress = https://localhost:5001
+@TodoApi_HostAddress = http://localhosts:5001
 @id = ef4307cf-e0dc-4ccc-84be-0b83ee3792c1
 
 GET {{TodoApi_HostAddress}}/api/TodoEntries/{{id}}
