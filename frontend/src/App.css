@@ -23,14 +23,23 @@
 }
 
 .todo-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   padding: 0.5rem 0;
   border-bottom: 1px solid #333;
 }
 
-.todo-item input {
+.todo-item-content {
+  width: 100%;
+}
+
+.todo-item-actions,
+.todo-edit-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.todo-item input,
+.todo-edit-controls input {
   flex: 1;
   padding: 0.4rem;
 }
@@ -45,4 +54,39 @@
 
 .todo-empty {
   color: #888;
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 55%);
+}
+
+.dialog {
+  width: min(100%, 360px);
+  padding: 1rem;
+  border: 1px solid #444;
+  border-radius: 0.5rem;
+  background: #1c1c22;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 35%);
+}
+
+.dialog h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.dialog p {
+  margin: 0 0 1rem;
+  color: #ddd;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }

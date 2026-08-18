@@ -27,3 +27,15 @@ export interface ApiResult<T> {
     message: string;
   };
 }
+
+export interface ProblemDetailsError {
+  code: string;
+  message: string;
+  errorType: number;
+}
+
+export interface ProblemDetailsResponse {
+  detail?: string;
+  title?: string;
+  errors?: ProblemDetailsError[];
+}

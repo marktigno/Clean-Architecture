@@ -435,3 +435,11 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+src/WebApi/bin/**
+src/Infrastructure/bin/**
+src/Application/bin/**
+src/Domain/bin/**
+src/WebApi/obj/**
+src/Infrastructure/obj/**
+src/Application/obj/**
+src/Domain/obj/**
