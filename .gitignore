@@ -449,6 +449,7 @@ src/Domain/obj/**
 /src/WebApi/obj/**
 /src/Infrastructure/bin/**
 /src/Infrastructure/obj/**
+/src/Infrastructure/Migrations
 /src/Application/bin/**
 /src/Application/obj/**
 /src/Domain/bin/**
