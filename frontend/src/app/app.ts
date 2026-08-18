@@ -34,15 +34,24 @@ export class App implements OnInit {
 
     if (payload && typeof payload === 'object') {
       const record = payload as Record<string, unknown>;
-      const nestedError = record['error'] && typeof record['error'] === 'object' ? (record['error'] as Record<string, unknown>) : null;
+      const problemDetails =
+        record['problemDetails'] && typeof record['problemDetails'] === 'object'
+          ? (record['problemDetails'] as Record<string, unknown>)
+          : null;
+      const nestedError =
+        record['error'] && typeof record['error'] === 'object'
+          ? (record['error'] as Record<string, unknown>)
+          : null;
+
+      const details = problemDetails ?? nestedError ?? record;
 
       const candidates = [
         record['message'],
+        problemDetails?.['message'],
         nestedError?.['message'],
-        record['detail'],
-        nestedError?.['detail'],
-        record['title'],
-        nestedError?.['title'],
+        details['message'],
+        details['detail'],
+        details['title'],
       ];
 
       for (const candidate of candidates) {
@@ -51,7 +60,14 @@ export class App implements OnInit {
         }
       }
 
-      const errors = Array.isArray(record['errors']) ? record['errors'] : Array.isArray(nestedError?.['errors']) ? nestedError['errors'] : [];
+      const errors = Array.isArray(details['errors'])
+        ? details['errors']
+        : Array.isArray(problemDetails?.['errors'])
+          ? problemDetails['errors']
+          : Array.isArray(nestedError?.['errors'])
+            ? nestedError['errors']
+            : [];
+
       for (const item of errors) {
         if (typeof item === 'string' && item.trim()) {
           return item;
