@@ -18,12 +18,12 @@ namespace Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("DockerMsSqlConnectionString")));
 
             // Use this if running on MSSQLLocalDB
-            //services.AddDbContext<ApplicationDbContext>(options =>
+            // services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(configuration.GetConnectionString("LocalDbConnectionString")));
 
             // Use this if running on Docker Postgres
-            //services.AddDbContext<ApplicationDbContext>(
-            //options => options
+            // services.AddDbContext<ApplicationDbContext>(
+            // options => options
             //    .UseNpgsql(configuration.GetConnectionString("DockerPostgresConnectionString"), npgsqlOptions =>
             //        npgsqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default))
             //    .UseSnakeCaseNamingConvention());
