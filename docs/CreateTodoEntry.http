@@ -1,8 +1,9 @@
-@TodoApi_HostAddress = http://localhost:5000
+@TodoApi_HostAddress = https://localhost:5001
 
-Post {{TodoApi_HostAddress}}/api/TodoEntries/create
+POST  {{TodoApi_HostAddress}}/api/TodoEntries/create
 Accept: application/json
 Content-Type: application/json
+
 {
     "todo": "Sample Todo entry."
 }
