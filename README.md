@@ -31,4 +31,7 @@ Then open Swagger UI to test the REST API endpoints: https://localhost:5001/swag
 Note: You can replace what Database system that you will use for this solution. Please configure the `appsettings.json` and comment/uncomment the corresponding code in `Infrastructure/DependencyInjection.cs` to use the database system of your choice. The default is set to SQL Server.
 
 ## Frontend
-A React + TypeScript (Vite) client that consumes the WebAPI's To-Do endpoints lives in [`frontend/`](./frontend). See [`frontend/README.md`](./frontend/README.md) for setup and run instructions.
+
+Frontend clients are included, both consuming the WebAPI's `api/TodoEntries` controller:
+
+- **React + TypeScript (Vite)** — [`frontend/`](./frontend) | See [`frontend/README.md`](./frontend/README.md) — runs at `http://localhost:5173`
