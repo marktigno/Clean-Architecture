@@ -12,6 +12,9 @@ Build the solution by executing the following commands on terminal/CLI:
 Run docker compose to up the database service:
 - ```docker componse up -d```
 
+Install ef tools on global:
+- ```dotnet tool install dotnet-ef --global```
+
 To migrate the database:
 - ```dotnet ef database update --project ./src/Infrastructure --startup-project ./src/WebApi```
 
