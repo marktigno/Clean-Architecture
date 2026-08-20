@@ -37,4 +37,4 @@ Note: You can replace what Database system that you will use for this solution. 
 
 Frontend clients are included, both consuming the WebAPI's `api/TodoEntries` controller:
 
-- **Angular** — [`frontend-angular/`](./frontend-angular) | See [`frontend-angular/README.md`](./frontend-angular/README.md) — runs at `http://localhost:4200`
+- **Angular** — [`frontend/`](./frontend-angular) | See [`frontend-angular/README.md`](./frontend-angular/README.md) — runs at `http://localhost:4200`
